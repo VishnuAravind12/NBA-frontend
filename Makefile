@@ -51,15 +51,18 @@ default: server
 	@# outputs startup log, removes last line ($$d) as ctl-c message is not applicable for background process
 	@sed '$$d' $(LOG_FILE)
 
+# Build the CSS with Tailwind
+build_css:
+	@echo "Building CSS with Tailwind..."
+	@npx tailwindcss -i ./assets/css/build.css -o ./assets/css/main.css
 
+# Start the local web server and watch for HTML changes
+server: stop convert build_css
+	@echo "Starting server and watching for HTML changes..."
+	@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) --watch --baseurl "/Stock_AI" > $(LOG_FILE) 2>&1 &
+	@echo "Server PID: $$!"
+	@browser-sync start --proxy "http://127.0.0.1:$(PORT)/Stock_AI" --files "_site/**/*.*" --reload-delay 2000
 
-# Start the local web server
-server: stop convert
-	@echo "Starting server..."
-	@@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) > $(LOG_FILE) 2>&1 & \
-		PID=$$!; \
-		echo "Server PID: $$PID"
-	@@until [ -f $(LOG_FILE) ]; do sleep 1; done
 
 
 # Convert .ipynb files to Markdown with front matter
@@ -81,9 +84,10 @@ clean: stop
 stop:
 	@echo "Stopping server..."
 	@# kills process running on port $(PORT)
-	@@lsof -ti :$(PORT) | xargs kill >/dev/null 2>&1 || true
+	@@lsof -ti :$(PORT) | xargs -r kill >/dev/null 2>&1 || true
 	@echo "Stopping logging process..."
 	@# kills previously running logging processes
-	@@ps aux | awk -v log_file=$(LOG_FILE) '$$0 ~ "tail -f " log_file { print $$2 }' | xargs kill >/dev/null 2>&1 || true
+	@@ps aux | awk -v log_file=$(LOG_FILE) '$$0 ~ "tail -f " log_file { print $$2 }' | xargs -r kill >/dev/null 2>&1 || true
 	@# removes log
 	@rm -f $(LOG_FILE)
+
