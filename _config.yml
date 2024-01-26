@@ -3,19 +3,11 @@ description: "Stock AI Game"
 owner_name: CSA-AI
 github_username: CSA-AI
 github_repo: "AI_Frontend_Mort"
-baseurl: "/Stock_AI"
+baseurl: ""
 future: true
 remote_theme: jekyll/minima
 minima:
   social_links:
-    - { platform: github, user_url: "https://github.com/nighthawkcoders/teacher_portfolio"}
-    - { platform: x, user_url: "https://x.com/NighthawkCoding/" }
-    - { platform: youtube, user_url: "https://www.youtube.com/@nighthawkcodingsociety2868" }      
-# remote_theme: pages-themes/dinky@v0.2.0
-# remote_theme: pages-themes/minimal@v0.2.0
-# remote_theme: pages-themes/hacker@v0.2.0
-# remote_theme: pages-themes/cayman@v0.2.0
-# remote_theme: pages-themes/time-machine@v0.2.0
 plugins:
 - jekyll-remote-theme
 - jekyll-postcss

@@ -1,9 +1,19 @@
-<h3>
-    <a class="post-link" href="{{ post.url | relative_url }}">
-    {{ post.title | escape }}
-    </a>
-</h3>
-{%- if site.show_description and post.description  -%}
-<p class="post-meta-description">{{ post.description }}</p>
-{%- endif -%}
-<p class="post-meta">{{ post.date | date: date_format }}</p>
+<style>
+  .card {box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); border-radius: 10px; transition: 0.3s;}
+  .card:hover {box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);}
+  .container {padding: 2px 16px;}
+</style>
+
+<div class="card">
+  <div class="container">
+      <h3>
+          <a class="post-link" href="{{ post.url | relative_url }}">
+          {{ post.title | escape }}
+          </a>
+      </h3>
+      {%- if site.show_description and post.description  -%}
+      <p class="post-meta-description">{{ post.description }}</p>
+      {%- endif -%}
+      <p class="post-meta">{{ post.date | date: date_format }}</p>
+  </div>
+</div>

@@ -16,10 +16,7 @@ NOTEBOOK_FILES := $(wildcard _notebooks/*.ipynb)
 DESTINATION_DIRECTORY = _posts
 MARKDOWN_FILES := $(patsubst _notebooks/%.ipynb,$(DESTINATION_DIRECTORY)/%_IPYNB_2_.md,$(NOTEBOOK_FILES))
 
-# Call server, then verify and start logging
-# ...
 
-# Call server, then verify and start logging
 default: server
 	@echo "Terminal logging starting, watching server..."
 	@# tail and awk work together to extract Jekyll regeneration messages
@@ -59,9 +56,9 @@ build_css:
 # Start the local web server and watch for HTML changes
 server: stop convert build_css
 	@echo "Starting server and watching for HTML changes..."
-	@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) --watch --baseurl "/Stock_AI" > $(LOG_FILE) 2>&1 &
+	@nohup bundle exec jekyll serve -H 127.0.0.1 -P $(PORT) --watch > $(LOG_FILE) 2>&1 &
 	@echo "Server PID: $$!"
-	@browser-sync start --proxy "http://127.0.0.1:$(PORT)/Stock_AI" --files "_site/**/*.*" --reload-delay 2000
+	@browser-sync start --proxy "http://127.0.0.1:$(PORT)" --files "_site/**/*.*" --reload-delay 2000
 
 
 
