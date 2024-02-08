@@ -286,7 +286,7 @@ h6 span{
                         <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
-                      <a href="#" class="btn1 mt-4">submit</a>
+                      <a href="#" onclick = "logIn()" class="btn1 mt-4">submit</a>
                                     <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p>
                     </div>
                   </div>
@@ -307,7 +307,11 @@ h6 span{
                         <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
                         <i class="input-icon uil uil-lock-alt"></i>
                       </div>
-                      <a href="#" class="btn1 mt-4">submit</a>
+                      <div class="form-group mt-2">
+                        <input type="date" name="logpass" class="form-style" placeholder="Your Birthday" id="logdob" autocomplete="off">
+                        <i class="input-icon uil uil-lock-alt"></i>
+                      </div>
+                      <a href="#" onclick = "signUp()" class="btn1 mt-4">submit</a>
                     </div>
                   </div>
                 </div>
@@ -315,3 +319,82 @@ h6 span{
             </div>
           </div>
     </div>
+<script>
+  
+  const signup_url = 'http://localhost:8085/api/person/post?';
+  const login_url = 'http://localhost:8085/authenticate';
+
+  function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  }
+
+  function showTab(tabId) {
+    // Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+
+    // Show the selected tab content
+    document.getElementById(tabId + '-content').style.display = 'block';
+  }
+
+  function signUp() {
+    let email = document.getElementById("logemail").value;
+    let password = document.getElementById("logpass").value;
+    let name = document.getElementById("logname").value;
+    let dob = document.getElementById("logdob").value;
+
+    const params = {
+      "email": email,
+      "password": encodeURIComponent(password),
+      "name": encodeURIComponent(name),
+      "dob": encodeURIComponent(dob)
+    };
+
+    console.log("sign up fetch url: " + signup_url + new URLSearchParams(params));
+
+    fetch(signup_url + new URLSearchParams(params), {
+        method: 'POST',
+      })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+  }
+
+  function logIn() {
+    let email = document.getElementById("logemail").value;
+    let password = document.getElementById("logpass").value;
+
+    const params = {
+      email: email,
+      password: password
+    };
+
+    fetch(login_url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(params),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        document.cookie = "token=" + data.token + "; path=/";
+        console.log(data)
+        if (data.status!=401) {
+          window.location.replace("/pages/profile");
+        } else {
+          console.log("bad email and password");
+        }
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
+
+
+</script>
