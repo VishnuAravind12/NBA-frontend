@@ -10,5 +10,12 @@
     <div class="navbar-end md:ml-auto md:mr-10">
       <a href="{{ site.baseurl }}/pages/graph_prediction.html" class="btn btn-ghost mr-10">PREDICTIONS</a>
       <a href="{{ site.baseurl }}/pages/signin" class="btn btn-ghost">SIGNIN</a>
+      <a class="btn btn-ghost" onclick="signout()">SIGNOUT</a>
     </div>
 </div>
+<script>
+  function signout() {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.replace("{{ site.baseurl }}/index.html");
+  }
+</script>
