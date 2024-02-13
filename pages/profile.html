@@ -1,0 +1,96 @@
+---
+layout: project
+---
+<style>
+	.text_photo {
+  position: relative;
+  display: inline-block;
+}
+
+.text_photo .image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.text_photo #explain {
+  position: absolute;
+  top: 50%;
+  left: 100px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.text_photo:hover #explain {
+  opacity: 1;
+}
+
+.text_photo img {
+  transition: filter 0.5s ease-in-out;
+}
+
+.text_photo:hover img {
+  filter: brightness(70%);
+}
+  </style>
+
+
+<body >
+	<div style = "width:80%; float: right;" class="bg-[#ACD1DC] md:m-20 p-10">
+	  <div class="flex flex-col bg-white p-5 flex-wrap gap-10">
+	    <div class="flex gap-10 flex-col md:flex-row m-auto md:m-0">
+            <div class="text_photo">
+				<div class="image-container">
+				  <img id="card" class="w-25 h-25 rounded-full mb-30 mr-80" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY9uEZZOwEMvQq-g7CUxnyhlKwmct7I8Ei4A&usqp=CAU" width="200">
+				  <p id="explain">Edit</p>
+				</div>
+			</div>
+			
+			<div class="flex flex-col justify-center">
+	        <h1 class=" text-6xl text-[#EFA43D] md:mt-5">James Lee </h1>
+	        <p class="text-gray-500 mt-2">User</p>
+	      </div>
+	    </div>
+	
+	    <div class="flex flex-row">
+	      <div class="flex flex-col gap-10 md:flex-row md:gap-10">
+	        <div class="flex flex-col gap-10">
+	          <div class = "space-y-[30px] ml-16">
+	            <h2 class=" text-4xl text-[#2390B3] font-bold border-l-4 border-[#2390B3] pl-2 mb-2">Profile</h2>
+	            <div class="box-content mb-20 h-36 w-36 p-4 border-4 ..." style = "width: 1200px; height: 300px;">
+                    <div class="containerS">
+						<div class="inner">
+						  <button class = "buttonS" type="button">Go Ahead</button>
+						  <div class="blob"></div>
+						</div>
+					  </div>
+                </div>
+	          </div>
+
+	        </div>
+	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</body>
+<script>
+
+
+
+	document.querySelectorAll(".inner").forEach((button) => {
+  button.onmousemove = (e) => {
+    const target = e.target;
+    const rect = target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    button.style.setProperty("--x", `${x}px`);
+    button.style.setProperty("--y", `${y}px`);
+    button.style.setProperty("--height", `${rect.height}px`);
+    button.style.setProperty("--width", `${rect.width}px`);
+  };
+});
+</script>
