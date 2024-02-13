@@ -9,6 +9,7 @@
     "tailwindcss": "^3.4.1"
   },
   "dependencies": {
-    "browser-sync": "^3.0.2"
+    "browser-sync": "^3.0.2",
+    "browsersync": "^0.0.1-security"
   }
 }
