@@ -2,95 +2,255 @@
 layout: project
 ---
 <style>
-	.text_photo {
-  position: relative;
-  display: inline-block;
-}
-
-.text_photo .image-container {
-  position: relative;
-  display: inline-block;
-}
-
-.text_photo #explain {
-  position: absolute;
-  top: 50%;
-  left: 100px;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-.text_photo:hover #explain {
-  opacity: 1;
-}
-
-.text_photo img {
-  transition: filter 0.5s ease-in-out;
-}
-
-.text_photo:hover img {
-  filter: brightness(70%);
-}
+	.alert {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		opacity: 0;
+		transition: opacity 0.5s ease-in-out;
+		z-index: 999;
+	}
+  
+	.alert.show {
+		opacity: 1;
+	}
+  
+	.form.active {
+		display: block;
+	}
+	.alert-success {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		opacity: 0;
+		transition: opacity 0.5s ease-in-out;
+		z-index: 999;
+		background-color: #4CAF50;
+		color: white;
+	}
+  
+	.alert-success.show {
+		opacity: 1;
+	}
   </style>
 
-
-<body >
-	<div style = "width:80%; float: right;" class="bg-[#ACD1DC] md:m-20 p-10">
-	  <div class="flex flex-col bg-white p-5 flex-wrap gap-10">
-	    <div class="flex gap-10 flex-col md:flex-row m-auto md:m-0">
-            <div class="text_photo">
-				<div class="image-container">
-				  <img id="card" class="w-25 h-25 rounded-full mb-30 mr-80" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY9uEZZOwEMvQq-g7CUxnyhlKwmct7I8Ei4A&usqp=CAU" width="200">
-				  <p id="explain">Edit</p>
+<div role="alert" id="errorAlert" class="alert alert-warning hidden">
+	<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+	<span id="errorMessage">Error Message Here</span>
+</div>
+  
+<div role="alert" id="successAlert" class="alert alert-success hidden">
+	<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+	<span id="successMessage">Success Message Here</span>
+</div>
+  
+<div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col lg:flex-row-reverse">
+        <div class="hero-form form card shrink-0 w-full max-w-sm shadow-2xl bg-base-100" id="signupForm">
+			<form class="card-body">
+				<h2 class="text-2xl mb-4">Stock Predictions</h2>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Ticker</span>
+					</label>
+					<input id="ticker" type="text" placeholder="ex. AAPL" class="input input-bordered" required />
 				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Number of Shares</span>
+					</label>
+					<input id="shares" type="text" placeholder="ex. 0" class="input input-bordered" required />
+				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Predicted Price Per Stock (In 2 Months)</span>
+					</label>
+					<input id="price" type="text" placeholder="ex. $0.00" class="input input-bordered" required />
+				</div>
+			</form>
+			<div class="form-control">
+				<button class="btn btn-primary ml-10 mr-10 mb-10" onclick="sendStats()">Save</button>
 			</div>
-			
-			<div class="flex flex-col justify-center">
-	        <h1 class=" text-6xl text-[#EFA43D] md:mt-5">James Lee </h1>
-	        <p class="text-gray-500 mt-2">User</p>
-	      </div>
-	    </div>
-	
-	    <div class="flex flex-row">
-	      <div class="flex flex-col gap-10 md:flex-row md:gap-10">
-	        <div class="flex flex-col gap-10">
-	          <div class = "space-y-[30px] ml-16">
-	            <h2 class=" text-4xl text-[#2390B3] font-bold border-l-4 border-[#2390B3] pl-2 mb-2">Profile</h2>
-	            <div class="box-content mb-20 h-36 w-36 p-4 border-4 ..." style = "width: 1200px; height: 300px;">
-                    <div class="containerS">
-						<div class="inner">
-						  <button class = "buttonS" type="button">Go Ahead</button>
-						  <div class="blob"></div>
-						</div>
-					  </div>
+		</div>
+		<div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+            <div class="p-8 space-y-4">
+                <h2 class="text-2xl mb-4">Profile Information</h2>
+                <div>
+                    <strong>Email:</strong> <span id="profileEmail"></span>
                 </div>
-	          </div>
-
-	        </div>
+            </div>
+            <div class="p-4 bg-base-100">
+                <button class="btn btn-outline btn-warning w-full" onclick="signout()">Sign Out</button>
+            </div>
+        </div>
+    </div>
 	
-	      </div>
-	    </div>
-	  </div>
-	</div>
-</body>
+</div>
+
+<div class="overflow-x-auto">
+	<table class="table table-zebra">
+	  <!-- head -->
+	  <thead>
+		<tr>
+		  <th></th>
+		  <th>Name</th>
+		  <th>Job</th>
+		  <th>Favorite Color</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<!-- row 1 -->
+		<tr>
+		  <th>1</th>
+		  <td>Cy Ganderton</td>
+		  <td>Quality Control Specialist</td>
+		  <td>Blue</td>
+		</tr>
+		<!-- row 2 -->
+		<tr>
+		  <th>2</th>
+		  <td>Hart Hagerty</td>
+		  <td>Desktop Support Technician</td>
+		  <td>Purple</td>
+		</tr>
+		<!-- row 3 -->
+		<tr>
+		  <th>3</th>
+		  <td>Brice Swyre</td>
+		  <td>Tax Accountant</td>
+		  <td>Red</td>
+		</tr>
+	  </tbody>
+	</table>
+  </div>
+
 <script>
+	var setURL = "http://localhost:8017/api/person/updateStocks"
 
+	function showErrorMessage(message) {
+		const errorAlert = document.getElementById("errorAlert");
+		const errorMessage = document.getElementById("errorMessage");
+  
+		errorMessage.innerText = message;
+		errorAlert.classList.remove("hidden");
+		errorAlert.classList.add("show");
+  
+		setTimeout(() => {
+			hideErrorMessage();
+		}, 5000);
+	}
+  
+	function hideErrorMessage() {
+		const errorAlert = document.getElementById("errorAlert");
+		errorAlert.classList.remove("show");
+		errorAlert.classList.add("hidden");
+	}
+  
+	function showSuccessMessage(message) {
+		const successAlert = document.getElementById("successAlert");
+		const successMessage = document.getElementById("successMessage");
+  
+		successMessage.innerText = message;
+		successAlert.classList.remove("hidden");
+		successAlert.classList.add("show");
+  
+		setTimeout(() => {
+			hideSuccessMessage();
+		}, 5000);
+	}
+  
+	function hideSuccessMessage() {
+		const successAlert = document.getElementById("successAlert");
+		successAlert.classList.remove("show");
+		successAlert.classList.add("hidden");
+	}
 
+    const token = getCookie("token");
+    if (token) {
+        const decodedToken = parseJwt(token);
+        const userEmail = decodedToken.sub;
+        const userRoles = decodedToken.roles;
 
-	document.querySelectorAll(".inner").forEach((button) => {
-  button.onmousemove = (e) => {
-    const target = e.target;
-    const rect = target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+        const profileEmailSpan = document.getElementById("profileEmail");
+        profileEmailSpan.innerText = userEmail;
+    } else {
+        window.location.replace("{{ site.baseurl }}/index.html");
+    }
 
-    button.style.setProperty("--x", `${x}px`);
-    button.style.setProperty("--y", `${y}px`);
-    button.style.setProperty("--height", `${rect.height}px`);
-    button.style.setProperty("--width", `${rect.width}px`);
-  };
-});
+    function signout() {
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        window.location.replace("{{ site.baseurl }}/index.html");
+    }
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    function parseJwt(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    }
+
+	function sendStats() { 
+		hideErrorMessage();
+	
+		const ticker = document.getElementById("ticker").value;
+		const shares = document.getElementById("shares").value;
+		const price = document.getElementById("price").value;
+	
+		// Retrieve token from cookie
+		const token = getCookie("token");
+	
+		// Parse token to get user ID
+		const decodedToken = parseJwt(token);
+		const userId = decodedToken.id;
+	
+		// Get current date and time
+		const date = new Date();
+		const currentDate = date.toISOString().slice(0, 19).replace('T', ' ');
+	
+		// Construct data object
+		const data = {
+			id: userId,
+			date: currentDate,
+			ticker: ticker,
+			shares: shares,
+			price: price
+		};
+	
+		fetch(setURL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			if (data.status !== 401) {
+				showSuccessMessage("Data successful! Your data has been created.");
+				tickerInput.value = "";
+				sharesInput.value = "";
+				priceInput.value = "";
+			} else {
+				showErrorMessage("Data failed. Please check your information and try again.");
+			}
+		})
+		.catch(error => {
+			console.error('error:', error);
+			showErrorMessage("An error occurred. Please try again later.");
+		});
+	}
+	
 </script>
