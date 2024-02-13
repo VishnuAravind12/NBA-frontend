@@ -1,0 +1,44 @@
+---
+layout: project
+---
+
+
+<label for="ticker">Select a stock:</label>
+<select id="ticker">
+    <option value="GOOGL">GOOGL</option>
+    <option value="AMZN">AMZN</option>
+    <option value="AAPL">AAPL</option>
+    <option value="TSLA">TSLA</option>
+    <option value="WMT">WMT</option>
+    <option value="MSFT">MSFT</option>
+    <option value="META">META</option>
+    <option value="COST">COST</option>
+    <option value="LMT">LMT</option>
+    <option value="NOC">NOC</option>
+    <option value="UNH">UNH</option>
+</select>
+<button onclick="getPrediction()">Get Prediction</button>
+<div id="predictionImage"></div>
+
+<script>
+    function getPrediction() {
+    var ticker = document.getElementById('ticker').value;
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      
+    fetch("http://localhost:8017/api/lstm/" + ticker, requestOptions)
+        .then(response => response.text())
+        .then(data => {
+            var img = document.createElement('img');
+            img.src = 'data:image/png;base64,' + data;
+    
+            var predictionImage = document.getElementById('predictionImage');
+            predictionImage.innerHTML = '';
+            predictionImage.appendChild(img);
+            })
+        .catch(error => console.log('error', error));
+    }
+</script>
