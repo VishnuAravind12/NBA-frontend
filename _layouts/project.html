@@ -13,9 +13,14 @@
   </head>
   <body>
     {% include header-custom.html %}
-    {%- include sidebar.html -%}
+    
     <main>
-      {{ content }}
+      <div class="w-1/4">
+        <!-- {%- include sidebar.html -%} -->
+      </div>
+      <div class="w-3/4">
+        {{ content }}
+      </div>
     </main>
   </body>
 </html>

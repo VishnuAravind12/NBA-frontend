@@ -29,7 +29,7 @@ layout: project
         redirect: 'follow'
       };
       
-    fetch("http://localhost:8017/api/lstm/GOOGL", requestOptions)
+    fetch("http://localhost:8017/api/lstm/" + ticker, requestOptions)
         .then(response => response.text())
         .then(data => {
             var img = document.createElement('img');
