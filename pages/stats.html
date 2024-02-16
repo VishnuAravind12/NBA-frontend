@@ -1,0 +1,92 @@
+---
+layout: project
+---
+
+<head>
+<!-- Chart.js CDN -->  
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<div class="hero">
+    
+</div>
+<div class="card w-1/2 shadow-xl">
+    <input id="symbol" type="text" placeholder="ex. AAPL" class="input input-bordered w-full max-w-xs" />
+    <button onclick="getStockData()" class="btn">Get Monthly Data</button>
+    <div id="stockData"></div>
+</div>
+
+<div class="card w-1/2 shadow-xl">
+    <div class="card-body">
+        <canvas id="stockChart"></canvas>
+    </div>
+</div>
+    
+    
+    
+    
+    <script>
+    const rapidApiKey = 'a96f7bb54emshee5a698b2344228p12bd6cjsnbb7e0177bdb6'; // Replace 'your_rapid_api_key' with your actual RapidAPI Key
+    const rapidApiHost = 'alpha-vantage.p.rapidapi.com';
+    
+    async function getStockData() {
+      const symbol = document.getElementById("symbol").value;
+      const url = `https://${rapidApiHost}/query?function=TIME_SERIES_MONTHLY&symbol=${symbol}&datatype=json&output_size=compact`;
+    
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': rapidApiKey,
+          'X-RapidAPI-Host': rapidApiHost
+        }
+      };
+    
+      try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        
+        let times = []; // Will store the dates
+        let closes = []; // Will store the closing prices
+    
+        // The API response structure for monthly data is different, adjust accordingly
+        for(let time in data['Monthly Time Series']) {
+          times.unshift(time); // Unshift to reverse the order, so the earliest date is first
+          closes.unshift(data['Monthly Time Series'][time]['4. close']); // Use closing price
+        }
+        
+        // Draw chart
+        new Chart(document.getElementById('stockChart'), {
+          type: 'line',
+          data: {
+            labels: times,
+            datasets: [{
+              label: `${symbol} Monthly Close`,
+              data: closes,
+              fill: false,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+            }]
+          },
+          options: {
+            scales: {
+              x: {
+                reverse: true,
+                title: {
+                  display: true,
+                  text: 'Month'
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'Price'
+                }
+              }
+            }
+          }
+        });
+        
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    </script>

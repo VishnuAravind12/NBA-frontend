@@ -8,10 +8,11 @@
     </div>
     
     <div class="navbar-end md:ml-auto md:mr-10">
+      <a href="{{ site.baseurl }}/pages/stats.html" class="btn btn-ghost mr-10">STATS</a>
       <a href="{{ site.baseurl }}/pages/graph_prediction.html" class="btn btn-ghost mr-10">PREDICTIONS</a>
-      <a href="{{ site.baseurl }}/pages/profile.html" class="btn btn-ghost">PROFILE</a>
-      <a href="{{ site.baseurl }}/pages/signin.html" class="btn btn-ghost">SIGNIN</a>
-      <a class="btn btn-ghost" onclick="signout()">SIGNOUT</a>
+      <a href="{{ site.baseurl }}/pages/profile.html" id="profileBtn" class="btn btn-ghost">PROFILE</a>
+      <a class="btn btn-ghost" id="signoutBtn" onclick="signout()">SIGNOUT</a>
+      <a href="{{ site.baseurl }}/pages/signin.html" id="signinBtn" class="btn btn-ghost">SIGN IN</a>
     </div>
 </div>
 <script>
@@ -19,4 +20,26 @@
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.replace("{{ site.baseurl }}/index.html");
   }
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    console.log(value)
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  getCookie("token");
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const token = getCookie("token");
+    if (token) {
+        document.getElementById('profileBtn').classList.remove('hidden');
+        document.getElementById('signoutBtn').classList.remove('hidden');
+        document.getElementById('signinBtn').classList.add('hidden');
+    } else {
+        document.getElementById('profileBtn').classList.add('hidden');
+        document.getElementById('signoutBtn').classList.add('hidden');
+        document.getElementById('signinBtn').classList.remove('hidden');
+    }
+});
 </script>

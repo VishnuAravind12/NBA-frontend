@@ -50,19 +50,24 @@ layout: project
   <span id="successMessage">Success Message Here</span>
 </div>
 
-<div class="hero bg-base-200">
+<div class="hero">
   <div class="hero-content flex-col lg:flex-row-reverse">
       <div class="hero-form card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 active">
-          <button class="btn m-5" onclick="toggleForm('signin')">Sign In</button>
-          <button class="btn m-5" onclick="toggleForm('signup')">Sign Up</button>
+        <div class="flex justify-center m-5">
+            <button class="btn mr-5" onclick="toggleForm('signin')">Sign In</button>
+            <button class="btn" onclick="toggleForm('signup')">Sign Up</button>
+        </div>
       </div>
   </div>
 </div>
 
-<div class="hero min-h-screen bg-base-200">
+<div class="hero">
   <div class="hero-content flex-col lg:flex-row-reverse">
       <div class="hero-form form card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 active" id="signinForm">
           <form class="card-body">
+            <label>
+              <span class="text-3xl justify-center">Sign-In</span>
+            </label>
               <div class="form-control">
                   <label class="label">
                       <span class="label-text">Email</span>
@@ -83,6 +88,9 @@ layout: project
 
       <div class="hero-form form card shrink-0 w-full max-w-sm shadow-2xl bg-base-100" id="signupForm">
           <form class="card-body">
+            <label>
+              <span class="text-3xl justify-center">Sign-Up</span>
+            </label>
               <div class="form-control">
                   <label class="label">
                       <span class="label-text">Email</span>
@@ -212,6 +220,10 @@ layout: project
       var password = document.getElementById("signupPassword").value;
       var name = document.getElementById("signupName").value;
       var dob = document.getElementById("signupDob").value;
+      var emailInput = document.getElementById("signupEmail");
+      var passwordInput = document.getElementById("signupPassword");
+      var nameInput = document.getElementById("signupName");
+      var dobInput = document.getElementById("signupDob");
 
       const params2 = {
           name: name,
@@ -233,6 +245,11 @@ layout: project
               if (data.status !== 401) {
                   console.log("Signup successful!");
                   showSuccessMessage("Signup successful! " + email + " has been created.");
+
+                  emailInput.value = "";
+                  nameInput.value = "";
+                  passwordInput.value = "";
+                  dobInput.value = "";
               } else {
                   console.log("Signup failed");
                   showErrorMessage("Signup failed. Please check your information and try again.");
